@@ -2,12 +2,6 @@ type TDeleteCategoryRequest = {
   id: string;
 };
 
-type TAddCategoryRequest = {
-  list: string[];
-  name: string;
-  status: boolean;
-};
-
 type TEditCategoryRequest = {
   list: string[];
   name: string;
@@ -21,7 +15,6 @@ type TGetCategoryByIdRequest = {
 
 export type {
   TDeleteCategoryRequest,
-  TAddCategoryRequest,
   TEditCategoryRequest,
   TGetCategoryByIdRequest,
 };
