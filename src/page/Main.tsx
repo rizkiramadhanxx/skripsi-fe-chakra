@@ -1,5 +1,7 @@
 import BreadCrumbs from '@/components/section/BreadCrumbs';
 import Dashboard from '@/components/section/Dashboard';
+import { useGetSetting } from '@/hooks/Dashboard/useGetSetting';
+import { FiEdit, FiInfo } from 'react-icons/fi';
 import {
   Box,
   Button,
@@ -8,9 +10,17 @@ import {
   Flex,
   Input,
   SimpleGrid,
+  Switch,
   Text,
+  Tooltip,
+  useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
 import { Textarea } from '@chakra-ui/react';
+import EditBlockWeb from '@/components/feature/EditBlockWeb';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { useEditBlockImages } from '@/hooks/Dashboard/useEditBlockImages';
+import useDebounce from '@/hooks/hooks/useDebounce';
 
 const BREADCRUMBS_DATA = [
   {
@@ -24,6 +34,56 @@ const BREADCRUMBS_DATA = [
 ];
 
 const Main = () => {
+  // toast START
+  const toast = useToast();
+  const toastSuccess = () => {
+    toast({
+      title: 'Fitur blokir gambar berhasil diperbarui',
+      position: 'top-right',
+      status: 'success',
+      duration: 4000,
+      isClosable: true,
+    });
+  };
+
+  // toast END
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { data, isSuccess, refetch } = useGetSetting();
+
+  const { mutate } = useEditBlockImages();
+
+  const [valueSwitch, setValueSwitch] = useState(
+    data?.data.data.setting.blockImages
+  );
+
+  useEffect(() => {
+    setValueSwitch(data?.data.data.setting.blockImages);
+  }, [data?.data.data.setting.blockImages]);
+
+  const debouncedValue = useDebounce<boolean>(valueSwitch, 2000);
+
+  const handleSwitchBlockImage = (e: ChangeEvent<HTMLInputElement>) => {
+    setValueSwitch(e.target.checked);
+  };
+
+  useEffect(() => {
+    if (debouncedValue !== data?.data.data.setting.blockImages) {
+      mutate(
+        {
+          blockImages: debouncedValue,
+        },
+        {
+          onSuccess: () => {
+            refetch();
+            toastSuccess();
+          },
+        }
+      );
+    }
+  }, [debouncedValue]);
+
+  const listBlockWeb = data?.data.data.setting.blockWeb.list;
+
   return (
     <Dashboard>
       <Box bg="white" p={4}>
@@ -50,25 +110,52 @@ const Main = () => {
           <Box>
             <Text>Blokir gambar :</Text>
           </Box>
-          <Flex
-            // bg="red.200"
-            justifyContent="start"
-            flexDirection="column"
-            alignItems="start"
-          >
-            <Button size="sm">Aktif</Button>
+          <Flex justifyContent="start" flexDirection="row" alignItems="start">
+            {data && (
+              <Switch
+                ml={{ lg: '-120px' }}
+                isChecked={valueSwitch}
+                onChange={handleSwitchBlockImage}
+                mt={1}
+              />
+            )}
+            <Tooltip
+              label={
+                data?.data.data.setting.blockImages ? 'Aktif' : 'Tidak Aktif'
+              }
+            >
+              <Box mt={1} ml={2}>
+                <FiInfo size={20} />
+              </Box>
+            </Tooltip>
           </Flex>
         </SimpleGrid>
-        <SimpleGrid columns={2}>
+        <SimpleGrid columns={[1, 2, 2, 2]} rowGap={2}>
           <Box>
             <Text>Daftar Website Blokir :</Text>
           </Box>
           <Flex
             justifyContent="start"
-            flexDirection="column"
+            gap={2}
+            flexDirection="row"
             alignItems="start"
           >
-            <Textarea />
+            {listBlockWeb && (
+              <Textarea rows={6} disabled value={listBlockWeb.join('\n')} />
+            )}
+            <Tooltip label="Edit Website Blokir" placement="bottom" hasArrow>
+              <Box cursor="pointer" onClick={onOpen}>
+                <FiEdit size="20" />
+                {listBlockWeb && (
+                  <EditBlockWeb
+                    isOpen={isOpen}
+                    data={listBlockWeb}
+                    onClose={onClose}
+                    refetch={refetch}
+                  />
+                )}
+              </Box>
+            </Tooltip>
           </Flex>
         </SimpleGrid>
       </SimpleGrid>

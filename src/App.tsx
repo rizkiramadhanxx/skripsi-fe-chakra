@@ -7,6 +7,7 @@ import Dashboard from './components/section/Dashboard';
 import Main from './page/Main';
 import TokenService from './service/Token';
 import ApiService from './service/ApiServices';
+import Category from './page/Category';
 
 const router = createBrowserRouter([
   {
@@ -25,7 +26,7 @@ const router = createBrowserRouter([
     path: '/kategori',
     element: (
       <ProtectedRoute>
-        <Dashboard>CUaks</Dashboard>
+        <Category />
       </ProtectedRoute>
     ),
   },

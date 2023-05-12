@@ -18,6 +18,9 @@ const BreadCrumbs = ({ items }: BreadCrumbs) => {
             as={NavLink}
             to={'/' + item.slug}
             textTransform="capitalize"
+            _hover={{
+              fontWeight: 'medium',
+            }}
           >
             {item.name}
           </BreadcrumbLink>
