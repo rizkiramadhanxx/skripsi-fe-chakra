@@ -17,7 +17,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { TRegisterForm } from '@/types/form';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
-import { useRegister } from '@/hooks/useRegister';
 
 const schema: yup.ObjectSchema<TRegisterForm> = yup.object().shape({
   name: yup.string().required('name is required').min(5, 'minimun 5 character'),

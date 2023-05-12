@@ -1,6 +1,6 @@
 import axios from 'axios';
-import TokenService from './TokenService';
-import { AuthenticationService } from './AuthService';
+import { AuthenticationService } from './AuthServices';
+import TokenService from './Token';
 
 const ApiService = {
   _401interceptor: null || 0,

@@ -1,11 +1,12 @@
 import './index.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Login from './page/Login';
-import Register from './page/Register';
-import ApiService from './service/ApiService';
-import TokenService from './service/TokenService';
+
 import ProtectedRoute from './utils/ProtectedRoute';
 import Dashboard from './components/section/Dashboard';
+import Main from './page/Main';
+import TokenService from './service/Token';
+import ApiService from './service/ApiServices';
 
 const router = createBrowserRouter([
   {
@@ -13,14 +14,10 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: '/register',
-    element: <Register />,
-  },
-  {
     path: '/dashboard',
     element: (
       <ProtectedRoute>
-        <Dashboard>Helo</Dashboard>
+        <Main />
       </ProtectedRoute>
     ),
   },

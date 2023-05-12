@@ -1,9 +1,9 @@
-import { TLoginForm, TRegisterForm } from '@/types/form';
-import ApiService from './ApiService';
-import TokenService from './TokenService';
+import { TAuthLoginRequest } from '../types/hooksTypes/authType';
+import ApiService from './ApiServices';
+import TokenService from './Token';
 
 const AuthenticationService = {
-  login: async (props: TLoginForm) => {
+  login: async (props: TAuthLoginRequest) => {
     const requestData = {
       method: 'post',
       headers: {
@@ -18,28 +18,9 @@ const AuthenticationService = {
       TokenService.saveRefreshToken(response.data.data.refresh_token);
       return response;
     } catch (error) {
-      throw error;
-    }
-  },
-  register: async (props: TRegisterForm) => {
-    const requestData = {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-      data: props,
-      url: `/register`,
-    };
-    try {
-      const response = await ApiService.customRequest(requestData);
-      TokenService.saveToken(response.data.data.token);
-      TokenService.saveRefreshToken(response.data.data.refresh_token);
-      return response;
-    } catch (error) {
       throw console.log(error);
     }
   },
-
   Logout: () => {
     ApiService.removeHeader();
     TokenService.removeToken();
@@ -56,24 +37,6 @@ const AuthenticationService = {
     };
     try {
       ApiService.setHeader(TokenService.getRefreshToken());
-      const response = await ApiService.customRequest(requestData);
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  Profile: async () => {
-    const requestData = {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-      url: '/me',
-    };
-
-    try {
-      ApiService.setHeader();
       const response = await ApiService.customRequest(requestData);
       return response;
     } catch (error) {

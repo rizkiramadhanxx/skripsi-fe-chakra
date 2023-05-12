@@ -3,7 +3,7 @@ export type TLoginForm = {
   password: string;
 };
 
-export type TRegisterForm = {
+export type TSignUpForm = {
   name: string;
   email: string;
   password: string;

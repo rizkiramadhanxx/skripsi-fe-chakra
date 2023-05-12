@@ -1,5 +1,5 @@
-import { useProfile } from '@/hooks/useProfile';
-import { AuthenticationService } from '@/service/AuthService';
+import { useProfile } from '@/hooks/Dashboard/useProfile';
+import { AuthenticationService } from '@/service/AuthServices';
 import {
   Box,
   BoxProps,
@@ -21,6 +21,7 @@ import { IconType } from 'react-icons';
 import {
   FiCompass,
   FiHome,
+  FiUser,
   FiLogOut,
   FiMenu,
   FiTrendingUp,
@@ -38,9 +39,6 @@ const LinkItems: Array<LinkItemProps> = [
 ];
 
 export default function Dashboard({ children }: { children: ReactNode }) {
-  // Service
-  const { data, isLoading } = useProfile();
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
@@ -63,9 +61,7 @@ export default function Dashboard({ children }: { children: ReactNode }) {
       </Drawer>
       {/* mobilenav */}
       <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
-      </Box>
+      <Box ml={{ base: 0, md: 60 }}>{children}</Box>
     </Box>
   );
 }
@@ -76,6 +72,8 @@ interface SidebarProps extends BoxProps {
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   const logout = () => AuthenticationService.Logout();
+  // Service
+  const { data, isLoading } = useProfile();
 
   // Action
   const handleLogout = () => {
@@ -92,16 +90,20 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       h="full"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+      <Flex h="12" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
           Logo
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
+      <Divider my={2} />
+      <NavItem slug="hahah" icon={FiUser} textTransform="capitalize">
+        Welcome, {data?.data.data.username}
+      </NavItem>
+      <Divider my={2} />
       {LinkItems.map((link) => (
         <NavItem
           key={link.name}
-          as={NavLink}
           // @ts-ignore
           to={'/' + link.slug}
           slug={link.slug}
@@ -118,7 +120,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           bg: 'red.400',
           color: 'white',
         }}
-        isLogout={true}
         onClick={handleLogout}
       >
         Logout
@@ -129,15 +130,13 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
-  children: ReactText;
-  isLogout?: boolean;
-  slug: string;
+  children: ReactNode;
+  slug?: string;
 }
 const NavItem = ({
   icon,
   children,
-  slug,
-  isLogout = false,
+  slug = undefined,
   ...rest
 }: NavItemProps) => {
   const params = useLocation();
@@ -145,11 +144,7 @@ const NavItem = ({
   const activeUrl = params.pathname.split('/')[lengthParams] === slug;
 
   return (
-    <Link
-      href="#"
-      style={{ textDecoration: 'none' }}
-      _focus={{ boxShadow: 'none' }}
-    >
+    <Link style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
         align="center"
         p="4"

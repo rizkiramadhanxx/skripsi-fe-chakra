@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
 import { logout } from '../redux/action/authSlice';
 import { RootState } from '../redux/store';
-import TokenService from '@/service/TokenService';
+import TokenService from '@/service/Token';
 
 type TProtectedRouteProps = {
   children: React.ReactNode;
