@@ -1,4 +1,5 @@
 import { useAddCategory } from '@/hooks/Category/useAddCategory';
+import { useEditCategory } from '@/hooks/Category/useEditCategory';
 import {
   Button,
   Flex,
@@ -14,21 +15,29 @@ import {
   ModalHeader,
   ModalOverlay,
   Textarea,
+  list,
   useToast,
 } from '@chakra-ui/react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 type TAddCategoryRequest = {
   list: string;
   name: string;
 };
 
-interface editCategoryProps {
+interface AddCategoryProps {
   isOpen: boolean;
   onClose: () => void;
+  type: 'ADD' | 'EDIT';
   refecth: any;
+  defaultValue?: {
+    _id: string;
+    list: string;
+    name: string;
+  };
 }
 const schema: yup.ObjectSchema<any> = yup.object().shape({
   name: yup.string().min(5, 'Minimal 5 karater').required('Nama harus terisi'),
@@ -42,24 +51,25 @@ const schema: yup.ObjectSchema<any> = yup.object().shape({
         return word !== '' && self.indexOf(word) == pos;
       };
 
-      // @ts-ignore
-      const newDataList: Array<boolean | string> = list
-        .split('\n')
-        .filter(filterSyntax)
-        .map((value: string) => {
-          return value.toLowerCase();
-        })
-        .map((value: string) => {
-          const regexValid = /^[A-Z]+$/i;
-          if (value.match(regexValid)) {
-            return value;
-          } else {
-            return false;
-          }
-        });
+      if (list) {
+        const newDataList: Array<boolean | string> = list
+          .split('\n')
+          .filter(filterSyntax)
+          .map((value: string) => {
+            return value.toLowerCase();
+          })
+          .map((value: string) => {
+            const regexValid = /^[A-Z]+$/i;
+            if (value.match(regexValid)) {
+              return value;
+            } else {
+              return false;
+            }
+          });
 
-      if (newDataList.includes(false)) {
-        return false;
+        if (newDataList.includes(false)) {
+          return false;
+        }
       }
 
       return true;
@@ -67,7 +77,13 @@ const schema: yup.ObjectSchema<any> = yup.object().shape({
   }),
 });
 
-const EditCategory = ({ isOpen, onClose, refecth }: editCategoryProps) => {
+const AddCategory = ({
+  isOpen,
+  onClose,
+  refecth,
+  type,
+  defaultValue = undefined,
+}: AddCategoryProps) => {
   // toast START
   const toast = useToast();
   const toastSuccess = () => {
@@ -91,18 +107,30 @@ const EditCategory = ({ isOpen, onClose, refecth }: editCategoryProps) => {
     });
   };
   // toast END
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = useForm<TAddCategoryRequest>({
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
 
+  // Service
   const { mutate } = useAddCategory();
+  const { mutate: mutateEdit } = useEditCategory();
+
+  // handle DefaultValue
+  useEffect(() => {
+    if (type === 'EDIT') {
+      reset(defaultValue);
+    }
+  }, []);
 
   const onSubmit = (data: TAddCategoryRequest) => {
+    // START : Validation Daftar Kategori
     const filterSyntax = (word: string, pos: any, self: any) => {
       return word !== '' && self.indexOf(word) == pos;
     };
@@ -121,26 +149,48 @@ const EditCategory = ({ isOpen, onClose, refecth }: editCategoryProps) => {
           return false;
         }
       });
-    mutate(
-      { ...data, list: newDataList },
-      {
-        onSuccess: () => {
-          toastSuccess();
-          refecth();
-          return onClose();
-        },
-        onError: () => {
-          return toastError('Gagal memperbarui data');
-        },
-      }
-    );
+    // END : Validation Daftar Kategori
+
+    if (type === 'ADD') {
+      mutate(
+        { ...data, list: newDataList },
+        {
+          onSuccess: () => {
+            toastSuccess();
+            refecth;
+            reset({ list: '', name: '' });
+            return onClose();
+          },
+          onError: () => {
+            return toastError('Gagal memperbarui data');
+          },
+        }
+      );
+    }
+
+    if (type === 'EDIT') {
+      mutateEdit(
+        //@ts-ignore
+        { ...data, list: newDataList, id: defaultValue?._id },
+        {
+          onSuccess: () => {
+            toastSuccess();
+            refecth;
+            return onClose();
+          },
+          onError: () => {
+            return toastError('Gagal memperbarui data');
+          },
+        }
+      );
+    }
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Tambah Kategori</ModalHeader>
+        <ModalHeader>{type === 'ADD' ? 'Tambah' : 'Edit'} Kategori</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Flex
@@ -184,4 +234,4 @@ const EditCategory = ({ isOpen, onClose, refecth }: editCategoryProps) => {
   );
 };
 
-export default EditCategory;
+export default AddCategory;

@@ -1,4 +1,4 @@
-import EditCategory from '@/components/feature/EditCategory';
+import AddCategory from '@/components/feature/AddCategory';
 import BreadCrumbs from '@/components/section/BreadCrumbs';
 import Dashboard from '@/components/section/Dashboard';
 import { useDeleteCategory } from '@/hooks/Category/useDeleteCategory';
@@ -8,7 +8,13 @@ import {
   Box,
   Button,
   Flex,
-  Skeleton,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spinner,
   Table,
   TableContainer,
@@ -31,6 +37,46 @@ const BREADCRUMBS_DATA = [
     slug: 'kategori',
   },
 ];
+
+interface ConfimDeleteModalProps {
+  onClose: () => void;
+  isOpen: boolean;
+  confirm: () => void;
+  name: string;
+}
+const ConfimDeleteModal = ({
+  onClose,
+  isOpen,
+  confirm,
+  name,
+}: ConfimDeleteModalProps) => {
+  return (
+    <Modal onClose={onClose} isOpen={isOpen} isCentered>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>
+          Apakah anda ingin menghapus data kategori "{name}"" ?
+        </ModalHeader>
+        <ModalBody></ModalBody>
+        <ModalFooter>
+          <Button onClick={onClose} colorScheme="blue">
+            Close
+          </Button>
+          <Button
+            colorScheme="red"
+            onClick={() => {
+              confirm();
+              onClose();
+            }}
+            ml={2}
+          >
+            Hapus
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+};
 
 const Category = () => {
   // toast START
@@ -56,8 +102,19 @@ const Category = () => {
     });
   };
   // toast END
+
   const { data, refetch, isFetched } = useGetCategory();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenConfirmDelete,
+    onOpen: onOpenConfirmDelete,
+    onClose: onCloseConfirmDelete,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenEditCategory,
+    onOpen: onOpenEditCategory,
+    onClose: onCloseEditCategory,
+  } = useDisclosure();
 
   // **START** DELETE CATEGORY //
 
@@ -90,10 +147,11 @@ const Category = () => {
           <Button colorScheme="blue" w="80px" onClick={onOpen}>
             Tambah
           </Button>
-          <EditCategory
+          <AddCategory
             // @ts-ignore
-            refetch={refetch}
+            refetch={refetch()}
             isOpen={isOpen}
+            type="ADD"
             onClose={onClose}
           />
         </Flex>
@@ -108,6 +166,18 @@ const Category = () => {
               </Tr>
             </Thead>
             <Tbody>
+              {data && !data.data.data.category[0] && (
+                <Td colSpan={4}>
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    height="100px"
+                    alignItems="center"
+                  >
+                    <Text fontWeight="bold"> Data Kosong</Text>
+                  </Box>
+                </Td>
+              )}
               {data ? (
                 data.data.data.category.map((data: any, key: number) => (
                   <Tr key={key}>
@@ -116,17 +186,39 @@ const Category = () => {
 
                     <Td>{data.list.slice(0, 3).join(', ')}</Td>
                     <Td>
-                      <Button variant="solid" colorScheme="blue">
+                      <Button
+                        variant="solid"
+                        colorScheme="blue"
+                        onClick={onOpenEditCategory}
+                      >
                         Edit
                       </Button>
+                      <AddCategory
+                        // @ts-ignore
+                        refetch={refetch()}
+                        isOpen={isOpenEditCategory}
+                        type="EDIT"
+                        defaultValue={{
+                          _id: data._id,
+                          list: data.list.join('\n'),
+                          name: data.name,
+                        }}
+                        onClose={onCloseEditCategory}
+                      />
                       <Button
                         ml={2}
                         variant="solid"
                         colorScheme="red"
-                        onClick={() => handleDelete(data._id)}
+                        onClick={onOpenConfirmDelete}
                       >
                         Hapus
                       </Button>
+                      <ConfimDeleteModal
+                        name={data.name}
+                        isOpen={isOpenConfirmDelete}
+                        onClose={onCloseConfirmDelete}
+                        confirm={() => handleDelete(data._id)}
+                      />
                     </Td>
                   </Tr>
                 ))

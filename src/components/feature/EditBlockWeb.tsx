@@ -60,7 +60,6 @@ const EditBlockWeb = ({
   const { register, handleSubmit, reset } = useForm({});
 
   const onSubmit = (data: any) => {
-    console.log(data);
     const filterSyntax = (word: string, pos: any, self: any) => {
       return word !== '' && self.indexOf(word) == pos;
     };
