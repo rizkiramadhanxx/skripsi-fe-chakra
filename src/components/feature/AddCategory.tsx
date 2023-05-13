@@ -157,7 +157,7 @@ const AddCategory = ({
         {
           onSuccess: () => {
             toastSuccess();
-            refecth;
+            () => refecth();
             reset({ list: '', name: '' });
             return onClose();
           },

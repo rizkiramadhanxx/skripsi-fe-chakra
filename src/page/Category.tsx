@@ -149,7 +149,7 @@ const Category = () => {
           </Button>
           <AddCategory
             // @ts-ignore
-            refetch={refetch()}
+            refetch={refetch}
             isOpen={isOpen}
             type="ADD"
             onClose={onClose}
