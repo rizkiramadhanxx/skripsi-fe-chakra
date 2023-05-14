@@ -2,6 +2,7 @@ import { useAddCategory } from '@/hooks/Category/useAddCategory';
 import { useEditCategory } from '@/hooks/Category/useEditCategory';
 import {
   Button,
+  ButtonProps,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -16,6 +17,7 @@ import {
   ModalOverlay,
   Textarea,
   list,
+  useDisclosure,
   useToast,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -29,8 +31,6 @@ type TAddCategoryRequest = {
 };
 
 interface AddCategoryProps {
-  isOpen: boolean;
-  onClose: () => void;
   type: 'ADD' | 'EDIT';
   refecth: any;
   defaultValue?: {
@@ -38,6 +38,7 @@ interface AddCategoryProps {
     list: string;
     name: string;
   };
+  buttonProps: ButtonProps;
 }
 const schema: yup.ObjectSchema<any> = yup.object().shape({
   name: yup.string().min(5, 'Minimal 5 karater').required('Nama harus terisi'),
@@ -78,12 +79,13 @@ const schema: yup.ObjectSchema<any> = yup.object().shape({
 });
 
 const AddCategory = ({
-  isOpen,
-  onClose,
   refecth,
   type,
+  buttonProps,
   defaultValue = undefined,
 }: AddCategoryProps) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   // toast START
   const toast = useToast();
   const toastSuccess = () => {
@@ -187,50 +189,63 @@ const AddCategory = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>{type === 'ADD' ? 'Tambah' : 'Edit'} Kategori</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <Flex
-            as="form"
-            onSubmit={handleSubmit(onSubmit)}
-            direction="column"
-            id="form"
-            rowGap={2}
-          >
-            <FormControl isInvalid={errors.name ? true : false}>
-              <FormLabel>Nama</FormLabel>
-              <Input {...register('name')} />
-              <FormErrorMessage>
-                {errors.name && errors.name.message}
-              </FormErrorMessage>
-            </FormControl>
-            <FormControl isInvalid={errors.list ? true : false}>
-              <FormLabel>Daftar Kata</FormLabel>
-              <Textarea rows={5} {...register('list')} />
-              <FormErrorMessage>
-                {errors.list && errors.list.message}
-              </FormErrorMessage>
-            </FormControl>
-          </Flex>
-        </ModalBody>
-        <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={onClose}>
-            Batal
-          </Button>
-          <Button
-            isDisabled={!isValid}
-            colorScheme="green"
-            form="form"
-            type="submit"
-          >
-            Simpan
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+    <>
+      <Button
+        ml={2}
+        variant="solid"
+        colorScheme={type === 'ADD' ? 'green' : 'blue'}
+        onClick={onOpen}
+        {...buttonProps}
+      >
+        {type === 'ADD' ? 'Tambah' : 'Edit'}
+      </Button>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            {type === 'ADD' ? 'Tambah' : 'Edit'} Kategori
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Flex
+              as="form"
+              onSubmit={handleSubmit(onSubmit)}
+              direction="column"
+              id="form"
+              rowGap={2}
+            >
+              <FormControl isInvalid={errors.name ? true : false}>
+                <FormLabel>Nama</FormLabel>
+                <Input {...register('name')} />
+                <FormErrorMessage>
+                  {errors.name && errors.name.message}
+                </FormErrorMessage>
+              </FormControl>
+              <FormControl isInvalid={errors.list ? true : false}>
+                <FormLabel>Daftar Kata</FormLabel>
+                <Textarea rows={5} {...register('list')} />
+                <FormErrorMessage>
+                  {errors.list && errors.list.message}
+                </FormErrorMessage>
+              </FormControl>
+            </Flex>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Batal
+            </Button>
+            <Button
+              isDisabled={!isValid}
+              colorScheme="green"
+              form="form"
+              type="submit"
+            >
+              Simpan
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
 

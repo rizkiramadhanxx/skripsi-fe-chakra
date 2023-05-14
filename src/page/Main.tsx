@@ -47,11 +47,15 @@ const Main = () => {
   };
 
   // toast END
+
+  // modal edit Daftar website
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const { data, isSuccess, refetch } = useGetSetting();
 
   const { mutate } = useEditBlockImages();
 
+  // START : Edit Switch blokir image
   const [valueSwitch, setValueSwitch] = useState(
     data?.data.data.setting.blockImages
   );
@@ -81,8 +85,16 @@ const Main = () => {
       );
     }
   }, [debouncedValue]);
+  // END : Edit Switch blokir image
+
+  const [valueChekboxBlokirKata, setvalueChekboxBlokirKata] = useState(
+    data?.data.data.category.category
+  );
 
   const listBlockWeb = data?.data.data.setting.blockWeb.list;
+  const listBlockText = data?.data.data.category.category;
+
+  console.log(listBlockText);
 
   return (
     <Dashboard>
@@ -101,9 +113,12 @@ const Main = () => {
             flexDirection="column"
             alignItems="start"
           >
-            <Checkbox defaultChecked>Checkbox</Checkbox>
-            <Checkbox defaultChecked>Checkbox</Checkbox>
-            <Checkbox defaultChecked>Checkbox</Checkbox>
+            {data &&
+              listBlockText.map((data: any, key: number) => (
+                <Checkbox key={key} isChecked={data.status}>
+                  {data.name}
+                </Checkbox>
+              ))}
           </Flex>
         </SimpleGrid>
         <SimpleGrid columns={2}>

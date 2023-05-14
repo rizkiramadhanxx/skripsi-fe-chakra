@@ -39,42 +39,42 @@ const BREADCRUMBS_DATA = [
 ];
 
 interface ConfimDeleteModalProps {
-  onClose: () => void;
-  isOpen: boolean;
   confirm: () => void;
   name: string;
 }
-const ConfimDeleteModal = ({
-  onClose,
-  isOpen,
-  confirm,
-  name,
-}: ConfimDeleteModalProps) => {
+const ConfimDeleteModal = ({ confirm, name }: ConfimDeleteModalProps) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
-    <Modal onClose={onClose} isOpen={isOpen} isCentered>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>
-          Apakah anda ingin menghapus data kategori "{name}"" ?
-        </ModalHeader>
-        <ModalBody></ModalBody>
-        <ModalFooter>
-          <Button onClick={onClose} colorScheme="blue">
-            Close
-          </Button>
-          <Button
-            colorScheme="red"
-            onClick={() => {
-              confirm();
-              onClose();
-            }}
-            ml={2}
-          >
-            Hapus
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+    <>
+      <Button ml={2} variant="solid" colorScheme="red" onClick={onOpen}>
+        Hapus
+      </Button>
+      <Modal onClose={onClose} isOpen={isOpen} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            Apakah anda ingin menghapus data kategori "{name}"" ?
+          </ModalHeader>
+          <ModalBody></ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose} colorScheme="blue">
+              Batal
+            </Button>
+            <Button
+              colorScheme="red"
+              onClick={() => {
+                confirm();
+                onClose();
+              }}
+              ml={2}
+            >
+              Hapus
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
 
@@ -104,17 +104,6 @@ const Category = () => {
   // toast END
 
   const { data, refetch, isFetched } = useGetCategory();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isOpenConfirmDelete,
-    onOpen: onOpenConfirmDelete,
-    onClose: onCloseConfirmDelete,
-  } = useDisclosure();
-  const {
-    isOpen: isOpenEditCategory,
-    onOpen: onOpenEditCategory,
-    onClose: onCloseEditCategory,
-  } = useDisclosure();
 
   // **START** DELETE CATEGORY //
 
@@ -144,15 +133,14 @@ const Category = () => {
       <Box display="flex" flexDirection="column" p={4} alignItems="center">
         <Flex direction={'column'} w="full" gap={2}>
           <Text fontWeight="bold">Daftar Kategori Kata</Text>
-          <Button colorScheme="blue" w="80px" onClick={onOpen}>
-            Tambah
-          </Button>
+
           <AddCategory
             // @ts-ignore
             refetch={refetch}
-            isOpen={isOpen}
             type="ADD"
-            onClose={onClose}
+            buttonProps={{
+              w: '70px',
+            }}
           />
         </Flex>
         <TableContainer w="full" mt={2}>
@@ -183,40 +171,20 @@ const Category = () => {
                   <Tr key={key}>
                     <Td>{key + 1}</Td>
                     <Td>{data.name}</Td>
-
                     <Td>{data.list.slice(0, 3).join(', ')}</Td>
                     <Td>
-                      <Button
-                        variant="solid"
-                        colorScheme="blue"
-                        onClick={onOpenEditCategory}
-                      >
-                        Edit
-                      </Button>
                       <AddCategory
                         // @ts-ignore
-                        refetch={refetch()}
-                        isOpen={isOpenEditCategory}
+                        refetch={refetch}
                         type="EDIT"
                         defaultValue={{
                           _id: data._id,
                           list: data.list.join('\n'),
                           name: data.name,
                         }}
-                        onClose={onCloseEditCategory}
                       />
-                      <Button
-                        ml={2}
-                        variant="solid"
-                        colorScheme="red"
-                        onClick={onOpenConfirmDelete}
-                      >
-                        Hapus
-                      </Button>
                       <ConfimDeleteModal
                         name={data.name}
-                        isOpen={isOpenConfirmDelete}
-                        onClose={onCloseConfirmDelete}
                         confirm={() => handleDelete(data._id)}
                       />
                     </Td>
