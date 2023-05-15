@@ -1,7 +1,7 @@
 import {
-  TAddCategoryRequest,
   TDeleteCategoryRequest,
   TEditCategoryRequest,
+  TEditManyCategory,
   TGetCategoryByIdRequest,
 } from '../../types/hooksTypes/categoryType';
 import ApiService from '../ApiServices';
@@ -42,7 +42,7 @@ const CategoryService = {
       throw error;
     }
   },
-  addCategory: async (data: TAddCategoryRequest) => {
+  addCategory: async (data: any) => {
     const requestData = {
       method: 'post',
       headers: {
@@ -86,6 +86,25 @@ const CategoryService = {
         'Content-Type': 'application/json; charset=utf-8',
       },
       url: `/get-category-by-id?id=${data.id}`,
+    };
+
+    try {
+      ApiService.setHeader();
+      const response = await ApiService.customRequest(requestData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  editManyCategory: async (data: TEditManyCategory) => {
+    const requestData = {
+      method: 'patch',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      url: `/update-many-category-list`,
+      data: data,
     };
 
     try {

@@ -18,6 +18,7 @@ import {
   Spinner,
   Table,
   TableContainer,
+  Tag,
   Tbody,
   Td,
   Text,
@@ -150,6 +151,7 @@ const Category = () => {
                 <Th>No</Th>
                 <Th>Nama</Th>
                 <Th>Daftar Kata</Th>
+                <Th>Status</Th>
                 <Th>Aksi</Th>
               </Tr>
             </Thead>
@@ -172,6 +174,17 @@ const Category = () => {
                     <Td>{key + 1}</Td>
                     <Td>{data.name}</Td>
                     <Td>{data.list.slice(0, 3).join(', ')}</Td>
+                    <Td>
+                      {data.status ? (
+                        <Tag variant="solid" colorScheme="green">
+                          Aktif
+                        </Tag>
+                      ) : (
+                        <Tag variant="solid" colorScheme="red">
+                          Tidak Aktif
+                        </Tag>
+                      )}
+                    </Td>
                     <Td>
                       <AddCategory
                         // @ts-ignore

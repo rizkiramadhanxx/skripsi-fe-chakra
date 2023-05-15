@@ -18,3 +18,10 @@ export type {
   TEditCategoryRequest,
   TGetCategoryByIdRequest,
 };
+
+export type TEditManyCategory = {
+  data: {
+    id: string;
+    status: boolean;
+  };
+};

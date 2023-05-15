@@ -159,7 +159,6 @@ const AddCategory = ({
         {
           onSuccess: () => {
             toastSuccess();
-            () => refecth();
             reset({ list: '', name: '' });
             return onClose();
           },
@@ -177,7 +176,6 @@ const AddCategory = ({
         {
           onSuccess: () => {
             toastSuccess();
-            refecth;
             return onClose();
           },
           onError: () => {

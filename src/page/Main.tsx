@@ -21,7 +21,9 @@ import EditBlockWeb from '@/components/feature/EditBlockWeb';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useEditBlockImages } from '@/hooks/Dashboard/useEditBlockImages';
 import useDebounce from '@/hooks/hooks/useDebounce';
-
+import { useForm } from 'react-hook-form';
+import { useEditManyCategory } from '@/hooks/Category/useEditManyCategory';
+import { FaSync } from 'react-icons/fa';
 const BREADCRUMBS_DATA = [
   {
     name: 'dashboard',
@@ -36,9 +38,9 @@ const BREADCRUMBS_DATA = [
 const Main = () => {
   // toast START
   const toast = useToast();
-  const toastSuccess = () => {
+  const toastSuccess = (message: string) => {
     toast({
-      title: 'Fitur blokir gambar berhasil diperbarui',
+      title: message,
       position: 'top-right',
       status: 'success',
       duration: 4000,
@@ -50,8 +52,12 @@ const Main = () => {
 
   // modal edit Daftar website
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { mutate: muatateStatusCategory } = useEditManyCategory();
 
   const { data, isSuccess, refetch } = useGetSetting();
+
+  const listBlockWeb = data?.data.data.setting.blockWeb.list;
+  const listBlockText = data?.data.data.category.category;
 
   const { mutate } = useEditBlockImages();
 
@@ -79,7 +85,7 @@ const Main = () => {
         {
           onSuccess: () => {
             refetch();
-            toastSuccess();
+            toastSuccess('Fitur blokir gambar berhasil diperbarui');
           },
         }
       );
@@ -87,14 +93,30 @@ const Main = () => {
   }, [debouncedValue]);
   // END : Edit Switch blokir image
 
-  const [valueChekboxBlokirKata, setvalueChekboxBlokirKata] = useState(
-    data?.data.data.category.category
-  );
+  // START : EDIT STATUS CATEGORY
+  const {
+    register: registerStatusCategory,
+    handleSubmit: handleSubmitStatusCategory,
+  } = useForm();
 
-  const listBlockWeb = data?.data.data.setting.blockWeb.list;
-  const listBlockText = data?.data.data.category.category;
+  const onSubmitStatusCategory = (data: any) => {
+    const { test } = data;
+    const newData: any = [];
+    for (let index = 0; index < test.length; index++) {
+      newData.push({ status: test[index].value, id: listBlockText[index]._id });
+    }
 
-  console.log(listBlockText);
+    muatateStatusCategory(
+      { data: newData },
+      {
+        onSuccess: () => {
+          toastSuccess('Berhasil mengupdate data kategori');
+        },
+      }
+    );
+  };
+
+  // END : EDIT STATUS CATEGORY
 
   return (
     <Dashboard>
@@ -113,12 +135,35 @@ const Main = () => {
             flexDirection="column"
             alignItems="start"
           >
-            {data &&
-              listBlockText.map((data: any, key: number) => (
-                <Checkbox key={key} isChecked={data.status}>
-                  {data.name}
-                </Checkbox>
-              ))}
+            <form onSubmit={handleSubmitStatusCategory(onSubmitStatusCategory)}>
+              {data &&
+                listBlockText.map((data: any, key: number) => (
+                  <div key={data._id}>
+                    <input
+                      defaultChecked={data.status}
+                      style={{
+                        backgroundColor: 'red',
+                        marginTop: '2px',
+                      }}
+                      type="checkbox"
+                      // important to include key with field's id
+                      {...registerStatusCategory(`test.${key}.value`)}
+                    />
+                    <label
+                      style={{
+                        marginBottom: '2px',
+                        marginLeft: '6px',
+                      }}
+                      {...registerStatusCategory(`test.${key}.id`)}
+                    >
+                      {data.name}
+                    </label>
+                  </div>
+                ))}
+              <Button type="submit" size="xs">
+                <FaSync />
+              </Button>
+            </form>
           </Flex>
         </SimpleGrid>
         <SimpleGrid columns={2}>
