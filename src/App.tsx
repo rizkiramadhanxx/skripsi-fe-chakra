@@ -7,6 +7,8 @@ import Main from './page/Main';
 import ApiService from './service/ApiServices';
 import TokenService from './service/Token';
 import ProtectedRoute from './utils/ProtectedRoute';
+import LogBlockWeb from './page/LogBlockWeb';
+import LogBlockText from './page/LogBlockText';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +28,22 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Category />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/log-blokir-web',
+    element: (
+      <ProtectedRoute>
+        <LogBlockWeb />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/log-blokir-teks',
+    element: (
+      <ProtectedRoute>
+        <LogBlockText />
       </ProtectedRoute>
     ),
   },

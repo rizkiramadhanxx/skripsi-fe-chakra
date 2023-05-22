@@ -55,7 +55,13 @@ const ConfimDeleteModal = ({ confirm, name }: ConfimDeleteModalProps) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            Apakah anda ingin menghapus data kategori "{name}"" ?
+            Apakah anda ingin menghapus data kategori{' '}
+            <i
+              style={{
+                fontWeight: '700',
+              }}
+            >{`"${name}"`}</i>{' '}
+            ?
           </ModalHeader>
           <ModalBody></ModalBody>
           <ModalFooter>
@@ -188,7 +194,6 @@ const Category = () => {
                     <Td>
                       <AddCategory
                         // @ts-ignore
-                        refetch={refetch}
                         type="EDIT"
                         defaultValue={{
                           _id: data._id,

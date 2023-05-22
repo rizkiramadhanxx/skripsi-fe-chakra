@@ -11,22 +11,22 @@ import {
   FlexProps,
   Icon,
   IconButton,
-  Link,
   Text,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
-import { ReactNode, ReactText } from 'react';
+import { ReactNode } from 'react';
 import { IconType } from 'react-icons';
 import {
-  FiCompass,
   FiHome,
-  FiUser,
   FiLogOut,
   FiMenu,
   FiTrendingUp,
+  FiUser,
+  FiGlobe,
 } from 'react-icons/fi';
-import { useLocation, NavLink } from 'react-router-dom';
+import { IoTextOutline } from 'react-icons/io5';
+import { NavLink, useLocation } from 'react-router-dom';
 
 interface LinkItemProps {
   name: string;
@@ -36,6 +36,8 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Dashboard', icon: FiHome, slug: 'dashboard' },
   { name: 'Kategori Kata', icon: FiTrendingUp, slug: 'kategori' },
+  { name: 'Log Blokir Web', icon: FiGlobe, slug: 'log-blokir-web' },
+  { name: 'Log Blokir Teks', icon: IoTextOutline, slug: 'log-blokir-teks' },
 ];
 
 export default function Dashboard({ children }: { children: ReactNode }) {

@@ -24,6 +24,7 @@ import useDebounce from '@/hooks/hooks/useDebounce';
 import { useForm } from 'react-hook-form';
 import { useEditManyCategory } from '@/hooks/Category/useEditManyCategory';
 import { FaSync } from 'react-icons/fa';
+
 const BREADCRUMBS_DATA = [
   {
     name: 'dashboard',
@@ -110,6 +111,7 @@ const Main = () => {
       { data: newData },
       {
         onSuccess: () => {
+          window.location.reload();
           toastSuccess('Berhasil mengupdate data kategori');
         },
       }
@@ -166,7 +168,7 @@ const Main = () => {
             </form>
           </Flex>
         </SimpleGrid>
-        <SimpleGrid columns={2}>
+        {/* <SimpleGrid columns={2}>
           <Box>
             <Text>Blokir gambar :</Text>
           </Box>
@@ -189,7 +191,7 @@ const Main = () => {
               </Box>
             </Tooltip>
           </Flex>
-        </SimpleGrid>
+        </SimpleGrid> */}
         <SimpleGrid columns={[1, 2, 2, 2]} rowGap={2}>
           <Box>
             <Text>Daftar Website Blokir :</Text>

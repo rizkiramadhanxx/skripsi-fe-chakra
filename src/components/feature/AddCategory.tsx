@@ -32,13 +32,12 @@ type TAddCategoryRequest = {
 
 interface AddCategoryProps {
   type: 'ADD' | 'EDIT';
-  refecth: any;
   defaultValue?: {
     _id: string;
     list: string;
     name: string;
   };
-  buttonProps: ButtonProps;
+  buttonProps?: ButtonProps;
 }
 const schema: yup.ObjectSchema<any> = yup.object().shape({
   name: yup.string().min(5, 'Minimal 5 karater').required('Nama harus terisi'),
@@ -79,7 +78,6 @@ const schema: yup.ObjectSchema<any> = yup.object().shape({
 });
 
 const AddCategory = ({
-  refecth,
   type,
   buttonProps,
   defaultValue = undefined,
@@ -160,6 +158,7 @@ const AddCategory = ({
           onSuccess: () => {
             toastSuccess();
             reset({ list: '', name: '' });
+            window.location.reload();
             return onClose();
           },
           onError: () => {
@@ -176,6 +175,7 @@ const AddCategory = ({
         {
           onSuccess: () => {
             toastSuccess();
+            window.location.reload();
             return onClose();
           },
           onError: () => {

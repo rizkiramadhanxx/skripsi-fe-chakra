@@ -138,11 +138,6 @@ export default function Login() {
                 <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
               </FormControl>
               <Stack spacing={10}>
-                <Stack align={'start'} justify={'space-between'}>
-                  <Link as={NavLink} to="/register" color={'blue.400'}>
-                    Register ?
-                  </Link>
-                </Stack>
                 <Button
                   bg={'blue.400'}
                   color={'white'}
