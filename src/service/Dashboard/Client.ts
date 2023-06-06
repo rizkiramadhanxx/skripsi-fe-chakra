@@ -1,13 +1,13 @@
-import ApiService from '../ApiServices';
+import ApiService from "../ApiServices";
 
 const ClientService = {
   getAllClient: async () => {
     const requestData = {
-      method: 'get',
+      method: "get",
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
+        "Content-Type": "application/json; charset=utf-8",
       },
-      url: '/get-all-client',
+      url: "/get-all-client",
     };
 
     try {
@@ -20,11 +20,47 @@ const ClientService = {
   },
   getClientByNumber: async (id: number) => {
     const requestData = {
-      method: 'get',
+      method: "get",
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
+        "Content-Type": "application/json; charset=utf-8",
       },
-      url: '/get-client/' + id,
+      url: "/get-client/" + id,
+    };
+
+    try {
+      ApiService.setHeader();
+      const response = await ApiService.customRequest(requestData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getAllBlockText: async () => {
+    const requestData = {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      url: "/get-all-block-text",
+    };
+
+    try {
+      ApiService.setHeader();
+      const response = await ApiService.customRequest(requestData);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getAllBlockWeb: async () => {
+    const requestData = {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      url: "/get-all-block-web",
     };
 
     try {
