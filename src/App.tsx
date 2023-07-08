@@ -1,22 +1,22 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import './index.css';
-import Login from './page/Login';
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import "./index.css";
+import Login from "./page/Login";
 
-import Category from './page/Category';
-import Main from './page/Main';
-import ApiService from './service/ApiServices';
-import TokenService from './service/Token';
-import ProtectedRoute from './utils/ProtectedRoute';
-import LogBlockWeb from './page/LogBlockWeb';
-import LogBlockText from './page/LogBlockText';
+import Category from "./page/Category";
+import Main from "./page/Main";
+import ApiService from "./service/ApiServices";
+import TokenService from "./service/Token";
+import ProtectedRoute from "./utils/ProtectedRoute";
+import LogBlockWeb from "./page/LogBlockWeb";
+import LogBlockText from "./page/LogBlockText";
 
 const router = createBrowserRouter([
   {
-    path: '/login',
+    path: "/login",
     element: <Login />,
   },
   {
-    path: '/dashboard',
+    path: "/dashboard",
     element: (
       <ProtectedRoute>
         <Main />
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/kategori',
+    path: "/kategori",
     element: (
       <ProtectedRoute>
         <Category />
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/log-blokir-web',
+    path: "/log-blokir-web",
     element: (
       <ProtectedRoute>
         <LogBlockWeb />
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/log-blokir-teks',
+    path: "/log-blokir-teks",
     element: (
       <ProtectedRoute>
         <LogBlockText />
@@ -57,7 +57,7 @@ if (TokenService.getToken()) {
   ApiService.unmount401Interceptor();
 }
 
-ApiService.init('http://localhost:3000/api/v1');
+ApiService.init("https://backend-website-skripsi.vercel.app/api/v1");
 
 function App() {
   return <RouterProvider router={router} />;
