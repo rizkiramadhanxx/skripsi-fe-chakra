@@ -9,8 +9,13 @@ import TokenService from "./service/Token";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import LogBlockWeb from "./page/LogBlockWeb";
 import LogBlockText from "./page/LogBlockText";
+import Landing from "./page/Landing";
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Landing />,
+  },
   {
     path: "/login",
     element: <Login />,
@@ -60,7 +65,8 @@ if (TokenService.getToken()) {
 ApiService.init("https://backend-website-skripsi.vercel.app/api/v1");
 
 function App() {
-  return <RouterProvider router={router} />;
+  // return <RouterProvider router={router} />;
+  return <div>Cuakl</div>;
 }
 
 export default App;
