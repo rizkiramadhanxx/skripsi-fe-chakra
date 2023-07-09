@@ -2,6 +2,7 @@
   "name": "suxz-codedesign",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://umpguard.rizkiramadhanx.dev/",
   "type": "module",
   "scripts": {
     "dev": "vite",
