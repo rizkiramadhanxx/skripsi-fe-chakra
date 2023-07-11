@@ -36,22 +36,22 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-  {
-    path: "/log-blokir-web",
-    element: (
-      <ProtectedRoute>
-        <LogBlockWeb />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/log-blokir-teks",
-    element: (
-      <ProtectedRoute>
-        <LogBlockText />
-      </ProtectedRoute>
-    ),
-  },
+  // {
+  //   path: "/log-blokir-web",
+  //   element: (
+  //     <ProtectedRoute>
+  //       <LogBlockWeb />
+  //     </ProtectedRoute>
+  //   ),
+  // },
+  // {
+  //   path: "/log-blokir-teks",
+  //   element: (
+  //     <ProtectedRoute>
+  //       <LogBlockText />
+  //     </ProtectedRoute>
+  //   ),
+  // },
 ]);
 
 if (TokenService.getToken()) {
@@ -66,7 +66,7 @@ ApiService.init("https://backend-website-skripsi.vercel.app/api/v1");
 
 function App() {
   // return <RouterProvider router={router} />;
-  return <div>Cuakl</div>;
+  return <RouterProvider router={router} />;
 }
 
 export default App;
