@@ -17,10 +17,9 @@ import {
 } from "@chakra-ui/react";
 import { isError } from "@tanstack/react-query";
 import { Select } from "chakra-react-select";
-import * as dayjs from "dayjs";
 import { useState } from "react";
 import { useGetBlockWeb } from "@/hooks/Client/useGetBlockWeb";
-dayjs().format();
+import convertDate from "@/utils/convertDate";
 
 const BREADCRUMBS_DATA = [
   {
@@ -88,9 +87,7 @@ const LogBlockWeb = () => {
                       <Td>{key + 1}</Td>
                       <Td>{e.ip || ""}</Td>
                       <Td>{e.url}</Td>
-                      <Td>
-                        {dayjs(e.datetime).format("DD/MM/YYYY, Pukul HH:mm:ss")}
-                      </Td>
+                      <Td>{convertDate(e.datetime)}</Td>
                       <Td>
                         <Tooltip label={e.userAgent || ""}>
                           {(e.userAgent &&

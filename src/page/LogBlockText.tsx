@@ -3,6 +3,7 @@ import Dashboard from "@/components/section/Dashboard";
 import { useGetAllClient } from "@/hooks/Client/useGetAllClient";
 import { useGetBlockText } from "@/hooks/Client/useGetBlockText";
 import { useGetClientByNumber } from "@/hooks/Client/useGetClientById";
+import convertDate from "@/utils/convertDate";
 import {
   Box,
   Flex,
@@ -16,9 +17,7 @@ import {
   Tooltip,
   Tr,
 } from "@chakra-ui/react";
-import * as dayjs from "dayjs";
 import { useState } from "react";
-dayjs().format();
 
 const BREADCRUMBS_DATA = [
   {
@@ -48,8 +47,6 @@ const LogBlockText = () => {
   };
 
   const { data: AllDataBlockText, isError, isSuccess } = useGetBlockText();
-
-  console.log(AllDataBlockText);
 
   return (
     <Dashboard>
@@ -97,9 +94,7 @@ const LogBlockText = () => {
                         </Tooltip>
                       </Td>
 
-                      <Td>
-                        {dayjs(e.datetime).format("DD/MM/YYYY, Pukul HH:mm:ss")}
-                      </Td>
+                      <Td>{convertDate(e.datetime)}</Td>
                       <Td>
                         <Tooltip label={e.userAgent || ""}>
                           {(e.userAgent &&
