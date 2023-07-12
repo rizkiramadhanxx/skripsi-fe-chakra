@@ -1,4 +1,4 @@
-import { TLoginForm } from '@/types/form';
+import { TLoginForm } from "@/types/form";
 import {
   Box,
   Button,
@@ -12,26 +12,26 @@ import {
   Stack,
   useColorModeValue,
   useToast,
-} from '@chakra-ui/react';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { Link as NavLink, useNavigate } from 'react-router-dom';
-import * as yup from 'yup';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
-import { logged } from '@/redux/action/authSlice';
-import { useEffect } from 'react';
-import { useLogin } from '@/hooks/Auth/useLogin';
+} from "@chakra-ui/react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { Link as NavLink, useNavigate } from "react-router-dom";
+import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { logged } from "@/redux/action/authSlice";
+import { useEffect } from "react";
+import { useLogin } from "@/hooks/Auth/useLogin";
 
 const schema: yup.ObjectSchema<TLoginForm> = yup.object().shape({
-  email: yup.string().email('must format email').required('email is required'),
+  email: yup.string().email("must format email").required("email is required"),
   password: yup
     .string()
-    .required('Password is required')
-    .min(8, 'Minimun 8 character')
+    .required("Password is required")
+    .min(8, "Minimun 8 character")
     .matches(
       /^(?=.*[a-zA-Z])(?=.*[0-9])/,
-      'Must combination number and alphabet'
+      "Must combination number and alphabet"
     ),
 });
 
@@ -47,13 +47,13 @@ export default function Login() {
     register,
     formState: { errors, isValid },
   } = useForm<TLoginForm>({
-    mode: 'onBlur',
+    mode: "onBlur",
     resolver: yupResolver(schema),
   });
 
   useEffect(() => {
     if (isLogin) {
-      navigate('/dashboard', {
+      navigate("/dashboard", {
         replace: true,
       });
     }
@@ -63,10 +63,10 @@ export default function Login() {
   const toast = useToast();
   const toastSuccess = () => {
     toast({
-      title: 'You are login',
-      position: 'top-right',
-      description: 'Welcome to Bagilink',
-      status: 'success',
+      title: "You are login",
+      position: "top-right",
+      description: "Welcome to Bagilink",
+      status: "success",
       duration: 4000,
       isClosable: true,
     });
@@ -74,10 +74,10 @@ export default function Login() {
 
   const toastError = () => {
     toast({
-      title: 'not successful to login',
-      position: 'top-right',
-      description: 'Check your username and password again',
-      status: 'error',
+      title: "not successful to login",
+      position: "top-right",
+      description: "Check your username and password again",
+      status: "error",
       duration: 4000,
       isClosable: true,
     });
@@ -89,7 +89,7 @@ export default function Login() {
       onSuccess: () => {
         dispatch(logged());
         toastSuccess();
-        navigate('/dashboard', {
+        navigate("/dashboard", {
           replace: true,
         });
       },
@@ -101,22 +101,22 @@ export default function Login() {
 
   return (
     <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}
+      minH={"100vh"}
+      align={"center"}
+      justify={"center"}
+      bg={useColorModeValue("gray.50", "gray.800")}
     >
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-        <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Login</Heading>
+      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+        <Stack align={"center"}>
+          <Heading fontSize={"4xl"}>Login</Heading>
         </Stack>
         <Box
-          rounded={'lg'}
-          bg={useColorModeValue('white', 'gray.700')}
-          boxShadow={'lg'}
+          rounded={"lg"}
+          bg={useColorModeValue("white", "gray.700")}
+          boxShadow={"lg"}
           p={8}
           minW={{
-            md: '400px',
+            md: "400px",
           }}
         >
           <Stack spacing={4}>
@@ -126,7 +126,7 @@ export default function Login() {
                 isInvalid={errors.email?.message ? true : false}
               >
                 <FormLabel>Email address</FormLabel>
-                <Input type="email" {...register('email')} />
+                <Input type="email" {...register("email")} />
                 <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
               </FormControl>
               <FormControl
@@ -134,15 +134,16 @@ export default function Login() {
                 isInvalid={errors.password?.message ? true : false}
               >
                 <FormLabel>Password</FormLabel>
-                <Input type="password" {...register('password')} />
+                <Input type="password" {...register("password")} />
                 <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
               </FormControl>
               <Stack spacing={10}>
                 <Button
-                  bg={'blue.400'}
-                  color={'white'}
+                  bg={"blue.400"}
+                  color={"white"}
+                  mt={2}
                   _hover={{
-                    bg: 'blue.500',
+                    bg: "blue.500",
                   }}
                   type="submit"
                   disabled={!isValid}
