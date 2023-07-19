@@ -68,9 +68,11 @@ const Navbar = () => {
               Tujuan
             </Text>
           </HashLink>
-          <Text fontSize="lg" fontWeight="medium">
-            Cara Pakai
-          </Text>
+          <HashLink to="#howtouse" smooth>
+            <Text fontSize="lg" fontWeight="medium">
+              Cara Pakai
+            </Text>
+          </HashLink>
           <Text fontSize="lg" fontWeight="medium">
             Keunggulan
           </Text>

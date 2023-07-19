@@ -41,10 +41,15 @@ const Hero = () => {
               ?
             </Text>
             <Text>
-              UMP Guard Adalah layanan pembatasan internet yang berada area ump,
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laborum
-              tempora porro voluptates quibusdam ab voluptatem optio dolorem
-              odio sed explicabo!
+              <span
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                UMP Guard
+              </span>{" "}
+              adalah layanan pembatasan internet untuk memblokir layanan dan
+              situs yang berbahaya untuk Universitas Muhammadiyah Purwokerto
             </Text>
             <Box>
               <Button>
