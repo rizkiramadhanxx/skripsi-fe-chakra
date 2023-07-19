@@ -13,6 +13,7 @@ const Footer = () => {
         bgColor="blue.500"
         justify="end"
         h={20}
+        color="white"
         px={{ base: "25px", sm: "40px", lg: "60px" }}
       >
         Copyright UMP Guard 2020

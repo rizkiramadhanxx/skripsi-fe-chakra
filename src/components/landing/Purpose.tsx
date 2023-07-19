@@ -38,7 +38,7 @@ const dataAccordion = [
 
 const Purpose = () => {
   return (
-    <Box display="flex" justifyContent="center" shadow="md">
+    <Box id="purpose" display="flex" justifyContent="center" shadow="md">
       <Flex
         width="full"
         height="full"

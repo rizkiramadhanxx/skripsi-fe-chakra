@@ -1,10 +1,17 @@
-import { Box, Button, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
-import React from "react";
+import {
+  Box,
+  Button,
+  Flex,
+  Image,
+  Link,
+  SimpleGrid,
+  Text,
+} from "@chakra-ui/react";
 import HeroLogo from "@/assets/hero.svg";
 
 const Hero = () => {
   return (
-    <Box display="flex" justifyContent="center">
+    <Box display="flex" justifyContent="center" id="hero">
       <Flex
         width="full"
         height="full"
@@ -13,7 +20,7 @@ const Hero = () => {
         justify="space-between"
         px={{ base: "20px", sm: "40px", lg: "60px" }}
       >
-        <SimpleGrid columns={[1, 1, 2]} paddingY={10}>
+        <SimpleGrid columns={[1, 1, 2]} paddingY={10} columnGap={200}>
           <Box
             minH={{ base: "450px", md: "fit-content" }}
             display="flex"
@@ -40,7 +47,14 @@ const Hero = () => {
               odio sed explicabo!
             </Text>
             <Box>
-              <Button>Unduh Ekstensi</Button>
+              <Button>
+                <Link
+                  href="https://drive.google.com/file/d/1-vHB-uN-1xGzZk-gDYNME61sS11RNWvb/view?usp=sharing"
+                  isExternal
+                >
+                  Unduh Ekstensi
+                </Link>
+              </Button>
             </Box>
           </Box>
           <Image src={HeroLogo} alt="Hero Logo" />
