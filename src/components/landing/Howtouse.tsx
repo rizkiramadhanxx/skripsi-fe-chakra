@@ -22,7 +22,7 @@ const Howtouse = () => {
           <iframe
             width="1000"
             height="400"
-            src="https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1&mute=1"
+            src="https://youtu.be/XXSrxMKsO98"
           ></iframe>
         </div>
       </Flex>
