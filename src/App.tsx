@@ -62,7 +62,7 @@ if (TokenService.getToken()) {
   ApiService.unmount401Interceptor();
 }
 
-ApiService.init("https://backend-website-skripsi.vercel.app/api/v1");
+ApiService.init(import.meta.env.VITE_BASE_URL);
 
 function App() {
   // return <RouterProvider router={router} />;

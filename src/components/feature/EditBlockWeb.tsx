@@ -1,5 +1,5 @@
-import { useEditBlockWeb } from '@/hooks/Dashboard/useEditBlockWeb';
-import { TEditBlockWebRequest } from '@/types/hooksTypes/settingType';
+import { useEditBlockWeb } from "@/hooks/Dashboard/useEditBlockWeb";
+import { TEditBlockWebRequest } from "@/types/hooksTypes/settingType";
 import {
   Button,
   FormControl,
@@ -14,9 +14,9 @@ import {
   ModalOverlay,
   Textarea,
   useToast,
-} from '@chakra-ui/react';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+} from "@chakra-ui/react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 interface EditBlockWebProps {
   isOpen: boolean;
@@ -35,9 +35,9 @@ const EditBlockWeb = ({
   const toast = useToast();
   const toastSuccess = () => {
     toast({
-      title: 'Data sukses diperbarui',
-      position: 'top-right',
-      status: 'success',
+      title: "Data sukses diperbarui",
+      position: "top-right",
+      status: "success",
       duration: 4000,
       isClosable: true,
     });
@@ -45,10 +45,10 @@ const EditBlockWeb = ({
 
   const toastError = (desc: string) => {
     toast({
-      title: 'Data gagal diperbarui',
-      position: 'top-right',
+      title: "Data gagal diperbarui",
+      position: "top-right",
       description: desc,
-      status: 'error',
+      status: "error",
       duration: 4000,
       isClosable: true,
     });
@@ -61,11 +61,11 @@ const EditBlockWeb = ({
 
   const onSubmit = (data: any) => {
     const filterSyntax = (word: string, pos: any, self: any) => {
-      return word !== '' && self.indexOf(word) == pos;
+      return word !== "" && self.indexOf(word) == pos;
     };
 
     const newData: Array<boolean | string> = data.list
-      .split('\n')
+      .split("\n")
       .filter(filterSyntax)
       .map((value: string) => {
         return value.toLowerCase();
@@ -81,7 +81,7 @@ const EditBlockWeb = ({
       });
 
     if (newData.includes(false)) {
-      return toastError('Bentuk data tidak valid, harus berupa domain');
+      return toastError("Bentuk data tidak valid, harus berupa domain");
     }
 
     mutate({ list: newData } as TEditBlockWebRequest, {
@@ -90,13 +90,13 @@ const EditBlockWeb = ({
         refetch();
         return onClose();
       },
-      onError: () => toastError('Terjadi kesalahan'),
+      onError: () => toastError("Terjadi kesalahan"),
     });
   };
 
   useEffect(() => {
     reset({
-      list: data.join('\n'),
+      list: data.join("\n"),
     });
   }, [data]);
 
@@ -111,7 +111,7 @@ const EditBlockWeb = ({
             <form onSubmit={handleSubmit(onSubmit)} id="formEdit">
               <FormControl>
                 <FormLabel>List</FormLabel>
-                <Textarea rows={6} {...register('list')} />
+                <Textarea rows={6} {...register("list")} />
                 <FormHelperText color="red">
                   *) List harus dengan format domain web
                 </FormHelperText>
